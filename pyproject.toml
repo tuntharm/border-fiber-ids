@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "border-fiber-ids"
+version = "0.1.0"
+description = "Fiber-optic intrusion detection system for Thailand's forested border regions (KMITL × Thai government)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2,<3",
+    "scipy>=1.13,<2",
+    "torch>=2.3,<3",
+    "scikit-learn>=1.5,<2",
+    "h5py>=3.11,<4",
+    "obspy>=1.4,<2",
+    "pyyaml>=6,<7",
+    "matplotlib>=3.9,<4",
+    "tqdm>=4.66,<5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "ruff>=0.5,<1",
+    "mypy>=1.10,<2",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+# ── Ruff ─────────────────────────────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "ANN", "N"]
+ignore = [
+    "ANN101",  # missing type annotation for self
+    "ANN102",  # missing type annotation for cls
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN"]  # relax annotation rules in test files
+
+# ── Mypy ─────────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true  # obspy stubs are incomplete
+warn_return_any = true
+warn_unused_ignores = true
+
+# ── Pytest ───────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

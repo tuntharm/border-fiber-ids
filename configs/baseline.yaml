@@ -1,0 +1,55 @@
+# Baseline experiment config — 2D-CNN on per-channel log-mel spectrograms.
+# Copy this file and rename before starting a new experiment.
+# Output goes in experiments/<YYYY-MM-DD>_<short-name>/.
+
+data:
+  raw_dir: data/raw           # root for raw DAS recordings
+  processed_dir: data/processed
+  labels_dir: data/labels
+  sample_rate: 1000           # TODO: confirm with interrogator spec (Hz)
+  n_channels: 128             # TODO: confirm channel count / gauge-length config
+  classes:
+    - human_footstep
+    - vehicle_light
+    - vehicle_heavy
+    - digging
+    - dropped_object
+    - animal
+    - environmental           # negative / background class
+
+preprocessing:
+  window_length_s: 2.0        # TODO: tune to shortest expected event duration
+  hop_length_s: 0.5
+  normalization: per_channel_zscore   # options: per_channel_zscore | global_minmax | none
+  denoise_method: bandpass    # options: bandpass | svd | none
+  bandpass_low_hz: 1.0        # TODO: set based on expected ground-wave frequencies
+  bandpass_high_hz: 200.0     # TODO: Nyquist = sample_rate / 2
+
+model:
+  arch: cnn2d                 # options: cnn2d | crnn | spatiotemporal
+  n_mels: 64                  # TODO: tune spectrogram resolution
+  n_fft: 512                  # TODO: tune frequency resolution
+  hop_length_samples: 128     # TODO: tune time resolution
+  conv_channels: [32, 64, 128]
+  kernel_size: [3, 3]
+  dropout: 0.3                # TODO: tune after first overfit check
+
+training:
+  optimizer: adam
+  learning_rate: 1.0e-3       # TODO: sweep 1e-4 to 1e-2
+  weight_decay: 1.0e-4
+  batch_size: 32              # TODO: adjust to GPU memory
+  epochs: 50                  # TODO: use early stopping; this is a ceiling
+  loss: cross_entropy
+  # class_weights: auto       # TODO: enable if class imbalance is severe after label audit
+  seed: 42
+
+evaluation:
+  metrics:
+    - precision_per_class
+    - recall_per_class
+    - f1_per_class
+    - macro_f1
+    - confusion_matrix
+  localization_error_m: true  # report median localization error in meters along fiber
+  output_dir: experiments/    # append <date>_<name> subdirectory at runtime
