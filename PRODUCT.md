@@ -1,5 +1,15 @@
 # PRODUCT.md — Business & Product Context
 
+## Official project title
+
+**Thai:** โครงการความร่วมมือในการประยุกต์ใช้เทคโนโลยี AI และ Machine Learning เพื่อส่งเสริมอุตสาหกรรมกระจายเสียง กิจการโทรทัศน์ และกิจการโทรคมนาคม ในพื้นที่ชายขอบ
+
+**English:** The Application and Cooperation of AI and Machine Learning Technologies in the Border Area to Support the National Broadcasting and Telecommunication Commission
+
+**Funder:** NBTC (กทปส) Research and Development Fund — Section 52(2) | Signed: 7 March 2025
+
+---
+
 ## What this is
 
 A fiber-optic intrusion detection system for Thailand's border. Buried fiber detects and classifies ground-coupled vibrations from illegal crossings, contraband drops, and related activity. The system upgrades from "something happened at position X" (signal detection) to "a human / vehicle / animal crossed at position X" (intelligent interpretation).
@@ -59,6 +69,16 @@ Thailand has ~5,600 km of border with Myanmar (2,400 km), Laos (1,800 km), Cambo
 | Q3 | Web app + mobile alert application |
 | Q3–Q4 | On-site testing and data collection |
 | Q4 | Field deployment, operator training, final report |
+
+## Project risks (from NBTC proposal)
+
+1. Hardware damage in harsh field environment
+2. False alarms from non-target vibrations (rain, wind, traffic)
+3. Environmental factors (temperature, humidity) reducing model accuracy
+4. Soil density variation affecting signal propagation
+5. Installation errors affecting alert reliability
+
+---
 
 ## Key technical decisions locked
 

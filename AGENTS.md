@@ -76,6 +76,41 @@ Hardware constants (sample rate, gauge length, channel spacing) are **never hard
 
 ---
 
+## Confirmed signal processing pipeline (from NBTC proposal Section 13)
+
+```
+Φ-OTDR interrogator
+  → laser pulse into fiber → Rayleigh backscatter phase retrieval
+  → raw vibration time-series [n_channels × n_samples]
+  → Adaptive Filtering      (time-varying noise; adapts parameters to incoming data)
+  → Wavelet Analysis        (time-frequency decomposition; detects events at different freq)
+  → Fourier Transform       (time → frequency domain; SNR improvement)
+  → Signal Image            (Spectrogram or Vibration Pattern Map)
+  → CNN / Hybrid NN         (pattern recognition → event classification)
+  → position + event type
+  → Web dashboard / Mobile alert (RBAC)
+```
+
+**ML model candidates (per proposal):**
+- ANN — fast, real-time capable
+- CNN — learns spatial/spectral features from signal images; primary candidate
+- RNN — temporal dependencies across windows
+- Hybrid NN (CRNN) — CNN front-end + RNN; primary production candidate
+
+**FPGA constraint:** model must fit FPGA resource budget (no cloud, no edge CPU). Avoid architectures with large memory footprints or dynamic control flow. Prefer fixed-size convolutions.
+
+---
+
+## Project risks (from NBTC proposal Section 15)
+
+1. Hardware damage in harsh field environment → reduced system performance
+2. False alarms from non-target vibrations (rain, nearby traffic, wind)
+3. Environmental factors (temperature, humidity, obstructions) reducing accuracy — requires sufficient dataset diversity
+4. Soil density variation across deployment area affects signal propagation and analysis
+5. Installation errors affecting reliability and alert trustworthiness
+
+---
+
 ## Open hardware questions
 
 | # | Question | Status |
